@@ -1,9 +1,8 @@
-{% if problem_list %}
-<ul>
-  {% for problem in problem_list %}
-  <li><a href="/focuses/{{ problem.id }}/">{{ problem.problem_text }}</a></li>
-  {% endfor %}
-</ul>
-{% else %}
-<p>No problems are available.</p>
-{% endif %}
+{% for focus in focuses %}
+<div class="focus">
+  <h2>{{ focus.name }}</h2>
+  <p>{{ focus.description }}</p>
+  <a href="{% url 'follow_focus' focus.id %}">Follow</a>
+  <a href="{% url 'unfollow_focus' focus.id %}">Unfollow</a>
+</div>
+{% endfor %}
