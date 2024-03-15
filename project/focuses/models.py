@@ -47,3 +47,8 @@ class Comment(models.Model):
 
     def __str__(self):
         return self.text
+
+
+class UserFollows(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="following")
+    focus = models.ForeignKey(Focus, on_delete=models.CASCADE, related_name="followers")
