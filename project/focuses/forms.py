@@ -1,30 +1,28 @@
 # forms.py
 from django import forms
 
-from .models import Focus, Item
-
-from .models import Focus, Item
+from .models import Comment, Focus, Problem, Solution
 
 
 class FocusForm(forms.ModelForm):
     class Meta:
         model = Focus
-        fields = ["name", "description"]
+        fields = ["name"]
 
 
 class ProblemForm(forms.ModelForm):
     class Meta:
-        model = Item
-        fields = ["title", "description", "focus"]
+        model = Problem
+        fields = ["title", "description"]
 
 
 class SolutionForm(forms.ModelForm):
     class Meta:
-        model = Item
-        fields = ["description", "problem"]
+        model = Solution
+        fields = ["description"]
 
 
 class CommentForm(forms.ModelForm):
     class Meta:
-        model = Item
-        fields = ["text", "problem", "solution", "parent_comment"]
+        model = Comment
+        fields = ["text"]

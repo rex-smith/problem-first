@@ -1,4 +1,10 @@
 <!-- feed.html -->
+<h1>Your Feed</h1>
+<h2>Create Problem</h2>
+<form method="post">
+  {% csrf_token %} {{ problem_form.as_p }}
+  <button type="submit">Create</button>
+</form>
 {% for problem in problems %}
 <h3>{{ problem.title }}</h3>
 <p>{{ problem.description }}</p>

@@ -1,8 +1,17 @@
-{% for focus in focuses %}
-<div class="focus">
-  <h2>{{ focus.name }}</h2>
-  <p>{{ focus.description }}</p>
-  <a href="{% url 'follow_focus' focus.id %}">Follow</a>
-  <a href="{% url 'unfollow_focus' focus.id %}">Unfollow</a>
-</div>
-{% endfor %}
+<h1>Focuses</h1>
+<h2>Create Focus</h2>
+<form method="post">
+  {% csrf_token %} {{ form.as_p }}
+  <button type="submit">Create</button>
+</form>
+<h2>Focuses</h2>
+<ul>
+  {% for focus in focuses %}
+  <li>
+    {% comment %} Go to detail page with URL of focus name {% endcomment %}
+    <a href="{% url 'detail' focus_slug=focus.slug%}">{{ focus.name }}</a>
+    <a href="{% url 'follow_focus' focus.id %}">Follow</a>
+    <a href="{% url 'unfollow_focus' focus.id %}">Unfollow</a>
+  </li>
+  {% endfor %}
+</ul>

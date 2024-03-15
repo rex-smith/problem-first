@@ -3,16 +3,26 @@ from django.db.models import Prefetch
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
 
+from .forms import CommentForm, FocusForm, ProblemForm, SolutionForm
 from .models import Comment, Focus, Problem, Solution, UserFollows
 
 
 def index(request):
     focuses = Focus.objects.all()
-    return render(request, "focuses/index.html", {"focuses": focuses})
+    # Include focus form
+    if request.method == "POST":
+        form = FocusForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect("index")
+    else:
+        form = FocusForm()
+
+    return render(request, "focuses/index.html", {"focuses": focuses, "form": form})
 
 
-def detail(request, focus_name):
-    focus = Focus.objects.get(name=focus_name)
+def detail(request, focus_slug):
+    focus = Focus.objects.get(slug=focus_slug)
     problems = (
         Problem.objects.filter(focus=focus)
         .prefetch_related(
@@ -31,8 +41,25 @@ def detail(request, focus_name):
         )
         .order_by("-created_at")
     )
+    if request.method == "POST":
+        problem_form = ProblemForm(request.POST)
+        if problem_form.is_valid():
+            problem = problem_form.save(commit=False)
+            problem.focus = focus
+            problem.created_by = request.user
+            problem.save()
+            return redirect("focuses:detail", focus_slug=focus.slug)
+    else:
+        problem_form = ProblemForm()
+
     return render(
-        request, "focuses/detail.html", {"focus": focus, "problems": problems}
+        request,
+        "focuses/detail.html",
+        {
+            "focus": focus,
+            "problems": problems,
+            "problem_form": problem_form,
+        },
     )
 
 
@@ -51,6 +78,8 @@ def unfollow_focus(request, focus_id):
 
 
 def feed(request):
+    # Include problem creation form
+    problem_form = ProblemForm()
     followed_focuses = request.user.userfollows_set.values_list("focus_id", flat=True)
     if followed_focuses:
         problems = Problem.objects.filter(focus__in=followed_focuses)
@@ -69,4 +98,8 @@ def feed(request):
             queryset=Comment.objects.order_by("-created_at").prefetch_related("likes"),
         ),
     ).order_by("-created_at")
-    return render(request, "feed.html", {"problems": problems_with_related})
+    return render(
+        request,
+        "feed.html",
+        {"problems": problems_with_related, "problem_form": problem_form},
+    )
