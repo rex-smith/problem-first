@@ -1,0 +1,25 @@
+<!-- feed.html -->
+{% for problem in problems %}
+<h3>{{ problem.title }}</h3>
+<p>{{ problem.description }}</p>
+<p>Posted by: {{ problem.user }}</p>
+<p>Posted on: {{ problem.created }}</p>
+<p>Likes: {{ problem.likes }}</p>
+<ul>
+  {% for solution in problem.solution_set.all %}
+  <li>
+    <div>
+      <p>{{ solution.description }} (Solution)</p>
+      <div>Likes: {{solution.likes}}</div>
+    </div>
+  </li>
+  {% endfor %} {% for comment in problem.comment_set.all %}
+  <li>
+    <div>
+      <p>{{ comment.text }} (Comment)</p>
+      <div>Likes: {{ comment.likes}}</div>
+    </div>
+  </li>
+  {% endfor %}
+</ul>
+{% endfor %}
