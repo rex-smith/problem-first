@@ -1,3 +1,6 @@
+{% extends 'base.html' %}
+{% block title %} All Focuses {% endblock %}
+{% block content %}
 <h1>Focuses</h1>
 <h2>Create Focus</h2>
 <form method="post">
@@ -8,10 +11,10 @@
 <ul>
   {% for focus in focuses %}
   <li>
-    {% comment %} Go to detail page with URL of focus name {% endcomment %}
-    <a href="{% url 'detail' focus_slug=focus.slug%}">{{ focus.name }}</a>
-    <a href="{% url 'follow_focus' focus.id %}">Follow</a>
-    <a href="{% url 'unfollow_focus' focus.id %}">Unfollow</a>
+    <a href="{% url 'focuses:detail' focus_slug=focus.slug%}">{{ focus.name }}</a>
+    <a href="{% url 'focuses:follow_focus' focus.id %}">Follow</a>
+    <a href="{% url 'focuses:unfollow_focus' focus.id %}">Unfollow</a>
   </li>
   {% endfor %}
 </ul>
+{% endblock %}

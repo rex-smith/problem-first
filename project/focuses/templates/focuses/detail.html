@@ -1,10 +1,14 @@
-<!-- detail.html -->
+{% extends 'base.html' %}
+{% block title %} {{ focus.name }} {% endblock %}
+<h1></h1>
+{% block content %}
 <h1>{{ focus.name }}</h1>
 <h2>Create Problem</h2>
 <form method="post">
   {% csrf_token %} {{ problem_form.as_p }}
   <button type="submit">Create</button>
 </form>
+<h2>Problems</h2>
 {% for problem in problems %}
 <h3>{{ problem.title }}</h3>
 <p>{{ problem.description }}</p>
@@ -29,3 +33,4 @@
   {% endfor %}
 </ul>
 {% endfor %}
+{% endblock %}
